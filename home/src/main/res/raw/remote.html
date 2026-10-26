@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Oriel">
+<meta name="theme-color" content="#0A0A0B">
+<title>Oriel remote</title>
+<style>
+:root{--ink:#0A0A0B;--tile:#141416;--tile2:#26262A;--paper:#F4F3EF;--muted:#8A8A93;--text2:#B4B4BC;--line:#3A3A40;--accent:#8B5CF6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--ink);color:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;-webkit-user-select:none;user-select:none;overscroll-behavior:none}
+main{max-width:420px;margin:0 auto;min-height:100%;padding:calc(env(safe-area-inset-top) + 24px) 24px calc(env(safe-area-inset-bottom) + 24px);display:flex;flex-direction:column;gap:20px}
+header{display:flex;align-items:center;justify-content:space-between}
+h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.02em}
+.state{display:flex;align-items:center;gap:8px;margin-top:4px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--text2)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.off .dot{background:#5C5C64}
+button{font:inherit;color:inherit;border:0;cursor:pointer;touch-action:manipulation}
+.round{width:44px;height:44px;border-radius:22px;background:var(--tile);display:flex;align-items:center;justify-content:center}
+button:active{transform:scale(.96);filter:brightness(1.3)}
+label{display:flex;flex-direction:column;gap:8px}
+.cap{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted)}
+input[type=text],input[type=password]{height:48px;padding:0 16px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--paper);font:inherit;font-size:16px;outline:none;-webkit-user-select:text;user-select:text;border-radius:0}
+input[type=text]:focus,input[type=password]:focus{border-bottom-color:var(--accent)}
+.typing .cap{color:var(--accent)}
+.typing input{border-bottom-color:var(--accent)}
+.files{display:flex;flex-direction:column;gap:8px;max-height:180px;overflow:auto}
+.file{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;font-size:14px;color:var(--text2)}
+.file span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--paper)}
+.file progress{grid-column:1 / -1}
+.pad{width:min(300px,78vw);aspect-ratio:1;align-self:center;border-radius:50%;background:var(--tile);position:relative;touch-action:none}
+.pad .arr{position:absolute;width:64px;height:64px;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.pad .u{top:4px;left:50%;transform:translateX(-50%)}.pad .d{bottom:4px;left:50%;transform:translateX(-50%)}
+.pad .l{left:4px;top:50%;transform:translateY(-50%)}.pad .r{right:4px;top:50%;transform:translateY(-50%)}
+.pad .ok{position:absolute;left:50%;top:50%;width:40%;height:40%;transform:translate(-50%,-50%);border-radius:50%;background:var(--tile2);font-size:16px;font-weight:600}
+.pad.hit{background:#1C1C20}
+.row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.row4 button{height:56px;border-radius:28px;background:var(--tile);display:flex;align-items:center;justify-content:center}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.row2 button{height:56px;border-radius:16px;background:var(--tile);font-size:16px;font-weight:500}
+.send{height:56px;border-radius:12px;background:var(--accent);color:var(--ink);font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
+dialog{border:0;padding:0;background:transparent;color:var(--paper);max-width:420px;width:calc(100% - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.sheet{background:#141416;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.sheet h2{margin:0;font-size:20px}
+.sheet .go{height:48px;border-radius:12px;background:var(--paper);color:var(--ink);font-weight:600}
+.sheet .alt{height:48px;border-radius:12px;background:var(--tile2)}
+.note{font-size:14px;color:var(--text2);min-height:20px}
+progress{width:100%;height:6px;appearance:none;-webkit-appearance:none;border:0;border-radius:3px;background:var(--tile2);overflow:hidden}
+progress::-webkit-progress-bar{background:var(--tile2)}progress::-webkit-progress-value{background:var(--accent)}progress::-moz-progress-bar{background:var(--accent)}
+svg{display:block}
+h1,h2,.note,.cap,.hint{text-wrap:pretty}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--tile);border-radius:12px;padding:4px;gap:4px}
+.seg button{height:40px;border-radius:9px;background:transparent;color:var(--text2);font-size:15px;font-weight:500}
+.seg button[aria-pressed=true]{background:var(--tile2);color:var(--paper)}
+.mouse{height:min(300px,78vw);border-radius:20px;background:var(--tile);position:relative;touch-action:none;display:none}
+.mouse .strip{position:absolute;top:12px;bottom:12px;right:12px;width:44px;border-radius:22px;background:var(--tile2);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.mouse .hint{position:absolute;left:20px;bottom:16px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted)}
+.mouse.hit{background:#1C1C20}
+body.mousemode .mouse{display:block}
+body.mousemode .pad{display:none}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1 id="tvname">Oriel</h1>
+      <div class="state" id="state"><span class="dot"></span><span id="stateText">Connected</span></div>
+    </div>
+    <button class="round" aria-label="Power" data-k="power"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v9"/><path d="M6.3 7a8 8 0 1 0 11.4 0"/></svg></button>
+  </header>
+
+  <label id="typeBox">
+    <span class="cap" id="typeCap">Type on the TV</span>
+    <input type="text" id="type" placeholder="Search, password, link" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="go">
+  </label>
+
+  <div class="seg" role="group" aria-label="Control mode">
+    <button id="modeArrows" aria-pressed="true">Arrows</button>
+    <button id="modeMouse" aria-pressed="false">Mouse</button>
+  </div>
+
+  <div class="mouse" id="mouse" role="group" aria-label="Mouse pad">
+    <div class="strip" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l4-4 4 4"/><path d="M8 15l4 4 4-4"/></svg></div>
+    <div class="hint">Drag to move, tap to click, two fingers to go back</div>
+  </div>
+
+  <div class="pad" id="pad" role="group" aria-label="Touch pad">
+    <button class="arr u" aria-label="Up" data-k="up"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg></button>
+    <button class="arr d" aria-label="Down" data-k="down"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+    <button class="arr l" aria-label="Left" data-k="left"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="arr r" aria-label="Right" data-k="right"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="ok" aria-label="OK" data-k="ok">OK</button>
+  </div>
+
+  <div class="row4">
+    <button aria-label="Back" data-k="back"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
+    <button aria-label="Home" data-k="home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M9 21h6"/></svg></button>
+    <button aria-label="Play or pause" data-k="play"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 5l8 7-8 7z"/><rect x="14" y="5" width="2.5" height="14" rx="1"/><rect x="18.5" y="5" width="2.5" height="14" rx="1"/></svg></button>
+    <button aria-label="Mute" data-k="mute"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M22 9l-6 6"/><path d="M16 9l6 6"/></svg></button>
+  </div>
+
+  <div class="row2">
+    <button data-k="voldown" data-repeat>Volume −</button>
+    <button data-k="volup" data-repeat>Volume +</button>
+  </div>
+
+  <button class="send" id="sendBtn">Send to TV
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+  </button>
+</main>
+
+<dialog id="sheet">
+  <form method="dialog" class="sheet" id="sheetForm">
+    <h2>Send to TV</h2>
+    <label><span class="cap">Link</span>
+      <input type="text" id="link" placeholder="Paste a link" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go"></label>
+    <button type="button" class="go" id="openLink">Open on TV</button>
+    <button type="button" class="alt" id="pick">Choose files</button>
+    <input type="file" id="file" multiple hidden>
+    <div class="files" id="files"></div>
+    <div class="note" id="note">Photos and videos show on the TV. Other files are kept in Downloads and open in their app.</div>
+    <button class="alt" value="close">Close</button>
+  </form>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const buzz = () => { if (navigator.vibrate) navigator.vibrate(8); };
+let online = true;
+function setOnline(ok) {
+  if (ok === online) return;
+  online = ok;
+  $('state').classList.toggle('off', !ok);
+  $('stateText').textContent = ok ? 'Connected' : 'Not reachable';
+}
+function post(path, body, type) {
+  return fetch(path, {method: 'POST', body: body || '', headers: type ? {'Content-Type': type} : {}})
+    .then(r => { setOnline(true); return r; })
+    .catch(e => { setOnline(false); throw e; });
+}
+const key = k => { buzz(); post('/key?k=' + k).catch(() => {}); };
+
+document.querySelectorAll('[data-k]').forEach(b => {
+  const k = b.dataset.k;
+  if (b.closest('.pad')) return;
+  if (b.hasAttribute('data-repeat')) {
+    let t = null;
+    const stop = () => { clearInterval(t); t = null; };
+    b.addEventListener('pointerdown', e => { e.preventDefault(); key(k); stop(); t = setInterval(() => key(k), 180); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, stop));
+  } else {
+    b.addEventListener('click', () => key(k));
+  }
+});
+
+// Touch pad: swipe in a direction moves once per 40 px; a tap on the centre is OK; arrows press directly.
+const pad = $('pad');
+let start = null, moved = false;
+pad.addEventListener('pointerdown', e => {
+  pad.setPointerCapture(e.pointerId);
+  start = {x: e.clientX, y: e.clientY, target: e.target.closest('[data-k]')};
+  moved = false;
+  pad.classList.add('hit');
+});
+pad.addEventListener('pointermove', e => {
+  if (!start) return;
+  const dx = e.clientX - start.x, dy = e.clientY - start.y;
+  if (Math.max(Math.abs(dx), Math.abs(dy)) < 40) return;
+  key(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+  start.x = e.clientX; start.y = e.clientY; moved = true;
+});
+const end = () => {
+  pad.classList.remove('hit');
+  if (start && !moved) key(start.target ? start.target.dataset.k : 'ok');
+  start = null;
+};
+pad.addEventListener('pointerup', end);
+pad.addEventListener('pointercancel', () => { pad.classList.remove('hit'); start = null; });
+
+// Mouse mode: drags move a pointer on the TV, a tap clicks, the strip on the right scrolls.
+function setMode(mouse) {
+  document.body.classList.toggle('mousemode', mouse);
+  $('modeMouse').setAttribute('aria-pressed', mouse);
+  $('modeArrows').setAttribute('aria-pressed', !mouse);
+  try { localStorage.setItem('oriel-mode', mouse ? 'mouse' : 'arrows'); } catch (e) {}
+}
+$('modeArrows').addEventListener('click', () => setMode(false));
+$('modeMouse').addEventListener('click', () => setMode(true));
+try { if (localStorage.getItem('oriel-mode') === 'mouse') setMode(true); } catch (e) {}
+
+const mouse = $('mouse');
+let m = null, acc = {dx: 0, dy: 0, kind: 'mouse'}, flushing = false;
+function flush() {
+  if (flushing || (!acc.dx && !acc.dy)) return;
+  const kind = acc.kind;
+  const q = kind === 'scroll' ? 'dy=' + Math.round(acc.dy) : 'dx=' + Math.round(acc.dx) + '&dy=' + Math.round(acc.dy);
+  acc = {dx: 0, dy: 0, kind: kind};
+  flushing = true;
+  post('/' + kind + '?' + q).catch(() => {}).finally(() => { flushing = false; setTimeout(flush, 30); });
+}
+let fingers = 0, twoAt = 0;
+mouse.addEventListener('touchstart', e => { fingers = e.touches.length; if (fingers === 2) twoAt = Date.now(); }, {passive: true});
+mouse.addEventListener('touchend', e => {
+  if (fingers === 2 && e.touches.length === 0 && Date.now() - twoAt < 350) { buzz(); post('/click?b=right').catch(() => {}); }
+  if (e.touches.length === 0) fingers = 0;
+}, {passive: true});
+mouse.addEventListener('pointerdown', e => {
+  if (!e.isPrimary) { m = null; return; }
+  mouse.setPointerCapture(e.pointerId);
+  const r = mouse.getBoundingClientRect();
+  m = {x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, t: Date.now(), scroll: e.clientX > r.right - 68};
+  mouse.classList.add('hit');
+});
+mouse.addEventListener('pointermove', e => {
+  if (!m || !e.isPrimary || fingers > 1) return;
+  const kind = m.scroll ? 'scroll' : 'mouse';
+  if (kind !== acc.kind) acc = {dx: 0, dy: 0, kind: kind};
+  acc.dx += e.clientX - m.x; acc.dy += e.clientY - m.y;
+  m.x = e.clientX; m.y = e.clientY;
+  flush();
+});
+mouse.addEventListener('pointerup', e => {
+  mouse.classList.remove('hit');
+  if (m && e.isPrimary && fingers < 2 && !m.scroll && Math.hypot(e.clientX - m.x0, e.clientY - m.y0) < 10 && Date.now() - m.t < 300) { buzz(); post('/click').catch(() => {}); }
+  m = null;
+});
+mouse.addEventListener('pointercancel', () => { mouse.classList.remove('hit'); m = null; });
+
+// Typing: the box and the text field open on the TV, in any app, hold the same text.
+let typeTimer = null, field = null, typedAt = 0;
+$('type').addEventListener('input', () => {
+  typedAt = Date.now();
+  clearTimeout(typeTimer);
+  typeTimer = setTimeout(() => post('/text', $('type').value, 'text/plain; charset=utf-8').catch(() => {}), 120);
+});
+$('type').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); clearTimeout(typeTimer); post('/text', $('type').value, 'text/plain; charset=utf-8').finally(() => key('enter')).catch(() => {}); $('type').blur(); }
+});
+// A fresh box with no field open on the TV: the TV forgets what was typed before, so nothing is deleted.
+$('type').addEventListener('focus', () => { if (!field) { $('type').value = ''; post('/text?fresh=1').catch(() => {}); } });
+const hints = {Search: 'search', Go: 'go', Send: 'send', Next: 'next', Done: 'done'};
+function showField(f) {
+  const box = $('type');
+  const fresh = (f && f.id) !== (field && field.id);
+  if (fresh && f) buzz();
+  field = f;
+  $('typeBox').classList.toggle('typing', !!f);
+  $('typeCap').textContent = f ? (f.app ? 'Typing in ' + f.app : 'The TV is asking for text') : 'Type on the TV';
+  box.type = f && f.secret ? 'password' : 'text';
+  box.placeholder = f && f.hint ? f.hint : 'Search, password, link';
+  box.setAttribute('enterkeyhint', f ? (hints[f.action] || 'done') : 'go');
+  // The TV's text wins, except while you are typing here.
+  if (f && (fresh || (document.activeElement !== box && Date.now() - typedAt > 1500)) && box.value !== f.text) box.value = f.text;
+  if (!f && fresh && document.activeElement !== box) box.value = '';
+}
+
+// Send to TV
+const sendNote = $('note').textContent;
+$('sendBtn').addEventListener('click', () => { $('note').textContent = sendNote; $('files').textContent = ''; $('sheet').showModal(); });
+$('openLink').addEventListener('click', () => {
+  const v = $('link').value.trim();
+  if (!v) { $('note').textContent = 'Paste a link first.'; return; }
+  post('/open', v, 'text/plain; charset=utf-8')
+    .then(() => { $('note').textContent = 'Opened on the TV.'; $('link').value = ''; })
+    .catch(() => { $('note').textContent = 'The TV did not answer. Check you are on the same Wi-Fi.'; });
+});
+$('link').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('openLink').click(); } });
+$('pick').addEventListener('click', () => $('file').click());
+// Files go one after another; the last one opens on the TV.
+function sendOne(f, last) {
+  return new Promise(done => {
+    const row = document.createElement('div');
+    row.className = 'file';
+    const name = document.createElement('span'); name.textContent = f.name;
+    const st = document.createElement('span'); st.textContent = 'Waiting';
+    const bar = document.createElement('progress'); bar.max = 1; bar.value = 0;
+    row.append(name, st, bar);
+    $('files').append(row);
+    const x = new XMLHttpRequest();
+    x.open('POST', '/file?name=' + encodeURIComponent(f.name) + '&open=' + (last ? 1 : 0));
+    x.setRequestHeader('Content-Type', f.type || 'application/octet-stream');
+    st.textContent = 'Sending';
+    x.upload.onprogress = e => { if (e.lengthComputable) bar.value = e.loaded / e.total; };
+    x.onload = () => { st.textContent = x.status < 300 ? 'On the TV' : x.status === 413 ? 'Too big' : 'Not taken'; bar.hidden = true; done(); };
+    x.onerror = () => { st.textContent = 'Failed'; bar.hidden = true; done(); };
+    x.send(f);
+  });
+}
+$('file').addEventListener('change', async () => {
+  const list = Array.from($('file').files);
+  $('file').value = '';
+  if (!list.length) return;
+  $('files').textContent = '';
+  $('note').textContent = list.length === 1 ? 'Sending 1 file' : 'Sending ' + list.length + ' files';
+  for (let i = 0; i < list.length; i++) await sendOne(list[i], i === list.length - 1);
+  $('note').textContent = 'Done.';
+});
+
+// Connection state
+// The TV knows the phone is open while this asks every 1.5 s, and steps its own keyboard aside.
+let polling = null;
+function poll() {
+  fetch('/state').then(r => r.json()).then(s => {
+    setOnline(true);
+    if (s.name) { $('tvname').textContent = s.name; document.title = s.name; }
+    showField(s.field || null);
+  }).catch(() => setOnline(false));
+}
+function wake() {
+  if (document.visibilityState !== 'visible') {
+    clearInterval(polling); polling = null;
+    if (navigator.sendBeacon) navigator.sendBeacon('/bye');
+    return;
+  }
+  if (polling) return;
+  poll();
+  polling = setInterval(poll, 1500);
+}
+document.addEventListener('visibilitychange', wake);
+window.addEventListener('pagehide', () => { if (navigator.sendBeacon) navigator.sendBeacon('/bye'); });
+wake();
+</script>
+</body>
+</html>
