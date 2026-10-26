@@ -1,0 +1,44 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/home/build/
+/mirror/build/
+/captures
+.externalNativeBuild/
+.cxx/
+*.keystore
+*.p12
+*.pass
+/dist/
+
+# Installer output when run from installer/
+/installer/tools/
+/installer/backups/
+/installer/last-tv.txt
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+Thumbs.db
+desktop.ini
+
+# IDE / editor
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*~
+
+# Secrets
+.env
+.env.local
+.env.production
+*.pem
+*.key
+credentials.*
