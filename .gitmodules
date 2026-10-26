@@ -1,0 +1,16 @@
+[submodule "mirror/src/main/cpp/third_party/UxPlay"]
+	path = mirror/src/main/cpp/third_party/UxPlay
+	url = https://github.com/FDH2/UxPlay.git
+	shallow = true
+[submodule "mirror/src/main/cpp/third_party/libplist"]
+	path = mirror/src/main/cpp/third_party/libplist
+	url = https://github.com/libimobiledevice/libplist.git
+	shallow = true
+[submodule "mirror/src/main/cpp/third_party/openssl-cmake"]
+	path = mirror/src/main/cpp/third_party/openssl-cmake
+	url = https://github.com/viaduck/openssl-cmake.git
+	shallow = true
+[submodule "mirror/src/main/cpp/third_party/ffmpeg"]
+	path = mirror/src/main/cpp/third_party/ffmpeg
+	url = https://github.com/FFmpeg/FFmpeg.git
+	shallow = true

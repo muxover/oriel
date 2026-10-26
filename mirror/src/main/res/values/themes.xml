@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.AirPlayServer" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/jax_ink</item>
+        <item name="android:colorAccent">@color/jax_violet</item>
+        <item name="android:statusBarColor">@color/jax_ink</item>
+        <item name="android:navigationBarColor">@color/jax_ink</item>
+    </style>
+</resources>
