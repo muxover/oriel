@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Oriel</string>
+    <string name="a11y_desc">Lets Oriel know when an app is on screen and when the remote is used.</string>
+</resources>

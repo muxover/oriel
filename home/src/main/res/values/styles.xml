@@ -1,0 +1,39 @@
+<resources>
+    <style name="Home" parent="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowAnimationStyle">@style/OrielFade</item>
+        <!-- No blank starting frame: the screen underneath stays until the new one has drawn. -->
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:colorAccent">#FF8B5CF6</item>
+        <item name="android:defaultFocusHighlightEnabled">false</item>
+    </style>
+    <style name="Popup" parent="@style/Home">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Toast</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+    <!-- The TV's video plane shows through: no window background, no dimming. -->
+    <style name="Video" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowShowWallpaper">false</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+    <!-- Screens fade in over the one underneath, and the one underneath does not move. -->
+    <style name="OrielFade" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/oriel_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/oriel_hold</item>
+        <item name="android:activityCloseEnterAnimation">@anim/oriel_hold</item>
+        <item name="android:activityCloseExitAnimation">@anim/oriel_hold</item>
+        <item name="android:taskOpenEnterAnimation">@anim/oriel_enter</item>
+        <item name="android:taskOpenExitAnimation">@anim/oriel_hold</item>
+        <item name="android:taskCloseEnterAnimation">@anim/oriel_hold</item>
+        <item name="android:taskCloseExitAnimation">@anim/oriel_hold</item>
+        <item name="android:taskToFrontEnterAnimation">@anim/oriel_enter</item>
+        <item name="android:taskToFrontExitAnimation">@anim/oriel_hold</item>
+        <item name="android:taskToBackEnterAnimation">@anim/oriel_hold</item>
+        <item name="android:taskToBackExitAnimation">@anim/oriel_hold</item>
+    </style>
+</resources>

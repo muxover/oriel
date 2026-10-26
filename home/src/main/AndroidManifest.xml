@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+   >
+    <uses-feature android:name="android.software.leanback" android:required="false"/>
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!-- Granted only when Oriel is installed as part of the TV's system (privapp-permissions-oriel.xml). -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.READ_LOGS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.REBOOT" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.FORCE_STOP_PACKAGES" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.DELETE_CACHE_FILES" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.DELETE_PACKAGES" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE" tools:ignore="ProtectedPermissions"/>
+    <application android:label="@string/app_name" android:theme="@style/Home" android:allowBackup="false">
+        <!-- HiSilicon TV boards: HDMI and AV through the TV's own libraries. Optional, so Oriel installs anywhere. -->
+        <uses-library android:name="com.hisilicon.android" android:required="false"/>
+        <uses-library android:name="com.hisilicon.android.tvapi" android:required="false"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.TvViewActivity"
+            android:theme="@style/Video" android:exported="false" android:screenOrientation="landscape" android:launchMode="singleTask" android:excludeFromRecents="true"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.WindowsMirrorActivity"
+            android:theme="@style/Video" android:exported="false" android:screenOrientation="landscape" android:launchMode="singleTask" android:excludeFromRecents="true"/>
+        <activity android:name="com.muxover.oriel.home.HomeActivity" android:exported="true" android:launchMode="singleTask"
+            android:stateNotNeeded="true" android:clearTaskOnLaunch="true" android:resumeWhilePausing="true"
+            android:screenOrientation="landscape" android:configChanges="keyboard|keyboardHidden|navigation|screenSize|orientation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.HOME"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.AllAppsActivity" android:exported="false" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.AmbientActivity" android:exported="true"
+            android:launchMode="singleTask" android:excludeFromRecents="true" android:screenOrientation="landscape">
+            <!-- Oriel Mirror opens Now Playing for music sent over AirPlay -->
+            <intent-filter>
+                <action android:name="com.muxover.oriel.NOW_PLAYING"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name="com.muxover.oriel.home.HotkeyActivity" android:exported="false" android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true" android:noHistory="true" android:taskAffinity="com.muxover.oriel.home.hotkey"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.SleepActivity" android:exported="false" android:theme="@style/Popup"
+            android:launchMode="singleTask" android:excludeFromRecents="true" android:taskAffinity="com.muxover.oriel.home.sleep" android:screenOrientation="landscape"/>
+        <receiver android:name="com.muxover.oriel.home.SleepActivity$Fire" android:exported="false"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.MediaActivity" android:exported="false" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.MirrorActivity" android:exported="false" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.SettingsActivity" android:exported="false" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.PowerActivity" android:exported="false" android:theme="@style/Popup"
+            android:launchMode="singleTask" android:excludeFromRecents="true" android:taskAffinity="com.muxover.oriel.home.power" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.InputActivity" android:exported="false" android:theme="@style/Popup"
+            android:launchMode="singleTask" android:excludeFromRecents="true" android:taskAffinity="com.muxover.oriel.home.input" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.ViewerActivity" android:exported="false" android:launchMode="singleTop" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.PlayerActivity" android:exported="false" android:launchMode="singleTop" android:screenOrientation="landscape"/>
+        <activity android:configChanges="keyboard|keyboardHidden|navigation|touchscreen|uiMode" android:name="com.muxover.oriel.home.MusicActivity" android:exported="false" android:launchMode="singleTop" android:screenOrientation="landscape"/>
+        <service android:name="com.muxover.oriel.home.KeyboardService" android:exported="true" android:label="Oriel keyboard"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod"/>
+            </intent-filter>
+            <meta-data android:name="android.view.im" android:resource="@xml/method"/>
+        </service>
+        <service android:name="com.muxover.oriel.home.MediaWatcher" android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService"/>
+            </intent-filter>
+        </service>
+        <service android:name="com.muxover.oriel.home.WindowWatcher" android:exported="true"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility"/>
+        </service>
+    </application>
+</manifest>
