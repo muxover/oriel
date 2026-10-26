@@ -1,0 +1,7 @@
+# Oriel's boot watchdog: undoes the last system change if Android does not finish starting after it.
+service oriel-watchdog /system/bin/sh /system/etc/oriel-watchdog.sh
+    class late_start
+    user root
+    group root
+    seclabel u:r:su:s0
+    oneshot
