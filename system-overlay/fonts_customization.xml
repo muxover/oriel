@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Geist for Oriel's system look; the overlay names these families in config_*FontFamily. -->
+<fonts-modification version="1">
+    <family customizationType="new-named-family" name="geist">
+        <font weight="400" style="normal">Geist-Regular.ttf</font>
+        <font weight="500" style="normal">Geist-Medium.ttf</font>
+        <font weight="600" style="normal">Geist-SemiBold.ttf</font>
+        <font weight="700" style="normal">Geist-Bold.ttf</font>
+    </family>
+    <family customizationType="new-named-family" name="geist-medium">
+        <font weight="500" style="normal">Geist-Medium.ttf</font>
+    </family>
+</fonts-modification>

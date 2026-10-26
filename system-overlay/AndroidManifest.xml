@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Oriel's look for Android's own dialogs and messages: colours, corners and the Geist font. Installed
+     in /system/product/overlay with Geist registered in /product/etc/fonts_customization.xml. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.muxover.oriel.overlay.android"
+    android:versionCode="2"
+    android:versionName="1.0.0">
+    <overlay android:targetPackage="android" android:isStatic="true" android:priority="100"/>
+    <application android:hasCode="false" android:label="Oriel system look"/>
+</manifest>

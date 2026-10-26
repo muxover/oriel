@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent_device_default_dark">#FF8B5CF6</color>
+    <color name="accent_device_default_light">#FF8B5CF6</color>
+    <color name="background_device_default_dark">#FF050506</color>
+    <color name="background_floating_device_default_dark">#FF141416</color>
+    <color name="primary_device_default_dark">#FF050506</color>
+    <dimen name="config_dialogCornerRadius">24dp</dimen>
+    <dimen name="dialog_corner_radius">24dp</dimen>
+    <dimen name="config_buttonCornerRadius">16dp</dimen>
+    <string name="config_bodyFontFamily" translatable="false">geist</string>
+    <string name="config_bodyFontFamilyMedium" translatable="false">geist-medium</string>
+    <string name="config_headlineFontFamily" translatable="false">geist</string>
+    <string name="config_headlineFontFamilyMedium" translatable="false">geist-medium</string>
+    <!-- The older Material theme, used by many of Android's own dialogs. -->
+    <color name="background_floating_material_dark">#FF141416</color>
+    <color name="background_material_dark">#FF050506</color>
+    <color name="accent_material_dark">#FF8B5CF6</color>
+    <color name="button_material_dark">#FF26262A</color>
+    <color name="primary_material_dark">#FF050506</color>
+    <string name="font_family_body_1_material" translatable="false">geist</string>
+    <string name="font_family_body_2_material" translatable="false">geist-medium</string>
+    <string name="font_family_button_material" translatable="false">geist-medium</string>
+    <string name="font_family_caption_material" translatable="false">geist</string>
+    <string name="font_family_display_1_material" translatable="false">geist</string>
+    <string name="font_family_display_2_material" translatable="false">geist</string>
+    <string name="font_family_display_3_material" translatable="false">geist</string>
+    <string name="font_family_display_4_material" translatable="false">geist</string>
+    <string name="font_family_headline_material" translatable="false">geist</string>
+    <string name="font_family_menu_material" translatable="false">geist</string>
+    <string name="font_family_subhead_material" translatable="false">geist</string>
+    <string name="font_family_title_material" translatable="false">geist-medium</string>
+</resources>
