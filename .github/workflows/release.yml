@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+# Creates the release from release-notes/<tag>.md only. The zip is built and signed on a PC
+# with tools/package.sh and attached to this release afterwards, so no Android build runs here.
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Release notes
+        id: notes
+        run: |
+          file="release-notes/${GITHUB_REF_NAME}.md"
+          if [ -f "$file" ]; then
+            title=$(head -n1 "$file" | sed -E 's/^# +//; s/^Oriel +//')
+            echo "file=$file" >> "$GITHUB_OUTPUT"
+            echo "name=$title" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: softprops/action-gh-release@v3
+        with:
+          name: ${{ steps.notes.outputs.name }}
+          body_path: ${{ steps.notes.outputs.file }}
+          generate_release_notes: ${{ steps.notes.outputs.file == '' }}
